@@ -1,32 +1,59 @@
-import React from 'react';
-import {Link} from 'react-router-dom'
-import {FiLogIn} from 'react-icons/fi'
+import React, {useState} from "react";
+import { Link, useHistory } from "react-router-dom";
+import { FiLogIn } from "react-icons/fi";
 
-import './styles.css';
 
-import LogoImg from '../../assets/logo.svg'
-import heroesImg from '../../assets/heroes.png'
+import api from '../../services/api';
+
+import "./styles.css";
+
+import LogoImg from "../../assets/logo.svg";
+import heroesImg from "../../assets/heroes.png";
 
 export default function Logon() {
-  return( 
+
+  const [id, setId] = useState('');
+  const history = useHistory();
+
+  async function handleLogin(e) {
+    e.preventDefault();
+
+    try {
+      const response = await api.post('sessions', {id});
+
+      localStorage.setItem('ongId', id);
+      localStorage.setItem('ongName', response.data.name);
+      history.push('/profile');
+      
+    } catch (error) {
+      alert('Falha no login, tente novamente.')
+    }
+  }
+
+  return (
     <div className="logon-container">
-        <section className="form">
-            <img src={LogoImg} alt="Be The Hero"/>
+      <section className="form">
+        <img src={LogoImg} alt="Be The Hero" />
 
-            <form action="">
-                <h1>Faça seu logon</h1>
+        <form onSubmit={handleLogin}>
+          <h1>Faça seu logon</h1>
 
-                <input placehold="Sua ID" />
-                <button className="button" type="submit">Entrar</button>
+          <input
+           placehold="Sua ID"
+           value={id}
+           onChange= {e => setId(e.target.value)}
+           />
+          <button className="button" type="submit">
+            Entrar
+          </button>
 
-                <Link to="/register">
-                    <FiLogIn size={16} color='#E02041' />
-                    Não tenho cadastro
-                </Link>
-            </form>
-
-        </section>
-        <img src={heroesImg} alt="Herores"/>
+          <Link className="back-link" to="/register">
+            <FiLogIn size={16} color="#E02041" />
+            Não tenho cadastro
+          </Link>
+        </form>
+      </section>
+      <img src={heroesImg} alt="Herores" />
     </div>
   );
 }
