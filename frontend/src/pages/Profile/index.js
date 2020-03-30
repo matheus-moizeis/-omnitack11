@@ -50,7 +50,7 @@ export default function Profile() {
         <img src={LogoImg} alt="Be The Hero" />
         <span>Bem vindo a {ongName}.</span>
 
-        <Link className="button" to="/incident/new">Cadastrar novo caso</Link>
+        <Link className="button" to="/incidents/new">Cadastrar novo caso</Link>
         <button onClick={handleLogout} type="button">
             <FiPower size={18} color="#E02041" />
         </button>
